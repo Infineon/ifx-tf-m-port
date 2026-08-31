@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+
+<Migration>
+  <Source id='edge_protect-1.0'>
+    <Destination id='edge_protect-1.2' valid='true' message='Migration is successful' defaultMapping='true'>
+    </Destination>
+  </Source>
+  <Source id='edge_protect-1.1'>
+    <Destination id='edge_protect-1.2' valid='true' message='Migration is successful' defaultMapping='true'>
+    </Destination>
+  </Source>
+</Migration>
