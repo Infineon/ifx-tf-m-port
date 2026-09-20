@@ -137,6 +137,13 @@ else ifeq ($(findstring MERCURY,$(TARGET)),MERCURY)
   else
     $(error Cannot detect EPC type for $(TARGET). Set DEVICE_$(DEVICE)_FEATURES or use a TARGET with EPC2/EPC4 in the name.)
   endif
+else
+  $(error Unsupported TARGET $(TARGET))
 endif
+
+# Fail early with a clear message if a resolved device configuration makefile is
+# missing (e.g. wrong TFM_DEVICE_CONFIG_DIR or an incomplete library checkout)
+# instead of letting "include" fail with a cryptic "No such file" error.
+$(foreach mk,$(TFM_DEVICE_CONFIG_MK),$(if $(wildcard $(mk)),,$(error TF-M device configuration makefile not found: $(mk))))
 
 include $(TFM_DEVICE_CONFIG_MK)

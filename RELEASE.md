@@ -7,6 +7,9 @@ with the PSA Certified guidelines. Thus, TF-M allows relevant chips and devices 
 
 ## Changelog
 
+### v2.3.400
+* Add support for PSC3M8/PSC3P8 devices.
+
 ### v2.3.300
 * Add support for PSC3P6/PSC3M6 devices.
 * Restructured TF-M libraries for better modularity:

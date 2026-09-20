@@ -1,7 +1,15 @@
 ################################################################################
+# \file PSC3P8.mk
+# \version 1.0
+#
+# \brief
+# Trusted Firmware-M (TF-M) configuration for PSC3P8 Family
+#
+################################################################################
 # \copyright
 # (c) 2023-2026, Infineon Technologies AG, or an affiliate of Infineon
 # Technologies AG. All rights reserved.
+#
 # SPDX-License-Identifier: Apache-2.0
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,41 +24,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ################################################################################
+
 ifeq ($(WHICHFILE),true)
 $(info Processing $(lastword $(MAKEFILE_LIST)))
-endif
-
-ifndef DEVICE_MODE
-# SECURE/NON_SECURE mode is provided by VCORE_ATTRS instead of DEVICE_MODE
-DEVICE_MODE=$(VCORE_ATTRS)
-endif
-
-################################################################################
-# Validate build
-################################################################################
-ifneq ($(DEVICE_MODE),SECURE)
-# This library is for secure project only
-ifneq ($(filter build_proj,$(MAKECMDGOALS)),)
-$(error Please use ifx-tf-m-ns library instead of ifx-tf-m for non-secure project)
-else
-$(warning Please use ifx-tf-m-ns library instead of ifx-tf-m for non-secure project)
-endif
 endif
 
 ################################################################################
 # Secure build
 ################################################################################
-# Use tfm-build target instead of build_proj
-ifneq ($(filter build_proj,$(MAKECMDGOALS)),)
-# Use ninja by default
-TFM_BUILD_USE_NINJA?=true
-MTB_LIBRARY__SKIP_LOAD_MAIN_MK=1
-build_proj: tfm-build
-endif
+ifeq ($(DEVICE_MODE),SECURE)
+# Platform
+TFM_CONFIGURE_OPTIONS+= -DTFM_PLATFORM:STRING=infineon/psc3p8
+else # ($(DEVICE_MODE),SECURE)
+################################################################################
+# Non-secure build
+################################################################################
 
-# TF-M secure Makefile
-IFX_TFM_S_MK:=$(abspath $(join $(dir $(lastword $(MAKEFILE_LIST))),/make/tfm_s.mk))
-ifeq ($(wildcard $(IFX_TFM_S_MK)),)
-$(error Required makefile not found: $(IFX_TFM_S_MK))
-endif
-include $(IFX_TFM_S_MK)
+# CM33 only - thus use TZ interface
+IFX_NS_INTERFACE_TZ=1
+
+endif # ($(DEVICE_MODE),SECURE)

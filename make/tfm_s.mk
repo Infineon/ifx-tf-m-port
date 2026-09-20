@@ -30,7 +30,11 @@ $(info Processing $(lastword $(MAKEFILE_LIST)))
 endif
 
 # Makefile with common macros
-include $(join $(dir $(lastword $(MAKEFILE_LIST))),common.mk)
+IFX_COMMON_MK:=$(join $(dir $(lastword $(MAKEFILE_LIST))),common.mk)
+ifeq ($(wildcard $(IFX_COMMON_MK)),)
+$(error Required makefile not found: $(IFX_COMMON_MK))
+endif
+include $(IFX_COMMON_MK)
 
 # delete target files on error
 .DELETE_ON_ERROR:
@@ -276,7 +280,7 @@ $(eval $(call TFM_SETUP_MTB_LIBRARY,IFX_MTB_SCMI_LIB_PATH,IFX_MTB_SCMI_LIB_PATH,
 
 # === Crypto Suite A6 ===
 # Use IFX_CRYPTOSUITE_LIB_PATH to specify custom Crypto Suite A6 library location
-$(eval $(call TFM_SETUP_MTB_LIBRARY,IFX_CRYPTOSUITE_LIB_PATH,IFX_CRYPTOSUITE_LIB_PATH,SEARCH_crypto-suite-psc3x8))
+$(eval $(call TFM_SETUP_MTB_LIBRARY,IFX_CRYPTOSUITE_LIB_PATH,IFX_CRYPTOSUITE_LIB_PATH,SEARCH_crypto-suite-psc3))
 
 # === mbedtls acceleration ===
 ifneq ($(SEARCH_cy-mbedtls-acceleration),)
